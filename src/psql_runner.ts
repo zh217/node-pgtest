@@ -70,10 +70,6 @@ export class PSqlRunner extends EventEmitter {
         return this.process.stdout;
     }
 
-    get stderr() {
-        return this.process.stderr;
-    }
-
     get exitOk() {
         return this.exitCode === 0;
     }

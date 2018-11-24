@@ -35,14 +35,9 @@ export class PgTapRunner {
             if (!this.onlyMode) {
                 await this.runTests();
             }
-            // console.log();
             console.log(`> DONE in ${'' + (Date.now() - startAt)}ms`);
-            // console.log();
         } catch (e) {
-            // console.error(e);
-            // console.log();
             console.log(chalk`> {red FAILED} in ${'' + (Date.now() - startAt)}ms`)
-            // console.log();
         }
     }
 
@@ -53,7 +48,7 @@ export class PgTapRunner {
     }
 
     private async runNuke() {
-        if (this.config.bareRun || (this.onlyMode && this.config.nukeOnly)) {
+        if (this.config.bareRun || (this.onlyMode && !this.config.nukeOnly)) {
             return;
         }
         const startAt = Date.now();
@@ -71,7 +66,7 @@ export class PgTapRunner {
     }
 
     private async runInit() {
-        if (this.config.bareRun || (this.onlyMode && this.config.initOnly)) {
+        if (this.config.bareRun || (this.onlyMode && !this.config.initOnly)) {
             return;
         }
         const startAt = Date.now();
@@ -116,7 +111,6 @@ export class PgTapRunner {
     }
 
     private async runTest(test: string) {
-        // console.log();
         process.stdout.write(chalk`{white > TEST {bold ${test}}} `);
         const runner = new PSqlRunner(this.runnerConfig,
             ['-f', TEST_PREAMBLE, '-f', test]);
