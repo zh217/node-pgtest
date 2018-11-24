@@ -1,0 +1,9 @@
+{
+  "connectionUri": "postgres:///postgres",
+  "directory": ".",
+  "psqlExecutable": "psql",
+  "testDiscoveryGlob": "**/*.test.sql",
+  "initScript": "__init__.sql",
+  "nukeScript": "__nuke__.sql",
+  "testScript": "__test__.sql"
+}
