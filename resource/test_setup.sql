@@ -1,16 +1,7 @@
-\unset ECHO
-\set QUIET 1
--- Turn off echo and keep things quiet.
+CREATE SCHEMA IF NOT EXISTS tap;
+GRANT USAGE ON SCHEMA tap TO PUBLIC;
 
--- Format the output for nice TAP.
-\pset format unaligned
-\pset tuples_only true
-\pset pager off
+ALTER DEFAULT PRIVILEGES IN SCHEMA tap GRANT EXECUTE ON FUNCTIONS TO PUBLIC;
+ALTER DEFAULT PRIVILEGES IN SCHEMA tap GRANT USAGE ON TYPES TO PUBLIC;
 
--- Revert all changes on failure.
-\set ON_ERROR_ROLLBACK 1
-\set ON_ERROR_STOP true
-
-SET client_min_messages TO WARNING;
-
-SET SEARCH_PATH = "$user", public, tap;
+CREATE EXTENSION IF NOT EXISTS pgtap SCHEMA tap;

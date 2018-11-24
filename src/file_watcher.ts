@@ -8,9 +8,9 @@ export class FileWatcher extends EventEmitter {
 
     constructor(readonly baseDir: string, readonly pattern: RegExp) {
         super();
-        this.watcher = chokidar.watch(baseDir);
-        this.watcher.on('add', this.onWatcherEvent.bind(this))
-        this.watcher.on('change', this.onWatcherEvent.bind(this))
+        this.watcher = chokidar.watch(baseDir, {ignoreInitial: true});
+        this.watcher.on('add', this.onWatcherEvent.bind(this));
+        this.watcher.on('change', this.onWatcherEvent.bind(this));
         this.watcher.on('unlink', this.onWatcherEvent.bind(this))
     }
 

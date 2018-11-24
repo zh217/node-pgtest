@@ -1,13 +1,13 @@
 import glob from 'glob';
 import path from 'path';
 
-export function getAllTestFiles(baseDir: string, testGlob: string) {
+export function getAllTestFiles(baseDir: string, testGlob: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
         glob(combineGlobWithBaseDir(baseDir, testGlob), (err, files) => {
             if (err) {
                 reject(err);
             } else {
-                resolve(files);
+                resolve(files.map(f => path.normalize(f)));
             }
         });
     });
@@ -23,5 +23,5 @@ export function combineGlobWithBaseDir(baseDir: string, testGlob: string) {
     }
 
     outPath = path.normalize(outPath);
-    return outPath + testGlob;
+    return path.join(outPath, testGlob);
 }

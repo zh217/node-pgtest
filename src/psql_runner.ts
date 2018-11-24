@@ -1,7 +1,7 @@
 import {ChildProcess, spawn} from 'child_process';
 import {EventEmitter} from "events";
 
-interface PSqlRunnerConfig {
+export interface PSqlRunnerConfig {
     psqlExecutable: string
     uri: string
     timeout: number
@@ -12,17 +12,25 @@ export class PSqlRunner extends EventEmitter {
     exited = false;
     exitCode: number | null = null;
     exitSignal: string | null = null;
+    stdoutData: string[] = [];
+    stderrData: string[] = [];
 
-    constructor(readonly config: PSqlRunnerConfig, readonly args: string[]) {
+    constructor(readonly config: PSqlRunnerConfig, readonly args: string[], readonly stopOnError = true) {
         super();
         this.process = spawn(config.psqlExecutable, this.makeArgs());
         this.process.on('exit', this.onExit.bind(this));
         this.process.on('error', this.onError.bind(this));
+        this.setupCapture();
         setTimeout(this.onTimeout.bind(this), config.timeout);
     }
 
+    private setupCapture() {
+        this.process.stdout.on('data', data => this.stdoutData.push(data.toString()));
+        this.process.stderr.on('data', data => this.stderrData.push(data.toString()));
+    }
+
     private makeArgs() {
-        return ['-d', this.config.uri, '-v', 'ON_ERROR_STOP=1', ...this.args];
+        return ['-d', this.config.uri, ...(this.stopOnError ? ['-v', 'ON_ERROR_STOP=1'] : []), ...this.args];
     }
 
     private onTimeout() {

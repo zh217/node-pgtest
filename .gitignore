@@ -136,3 +136,4 @@ typings/
 .serverless
 
 yarn.lock
+test_db/
