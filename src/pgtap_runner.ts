@@ -53,7 +53,7 @@ export class PgTapRunner {
     }
 
     private async runNuke() {
-        if (this.config.bareRun || (this.onlyMode && !this.config.initOnly)) {
+        if (this.config.bareRun || (this.onlyMode && this.config.nukeOnly)) {
             return;
         }
         const startAt = Date.now();
@@ -71,7 +71,7 @@ export class PgTapRunner {
     }
 
     private async runInit() {
-        if (this.config.bareRun || (this.onlyMode && !this.config.nukeOnly)) {
+        if (this.config.bareRun || (this.onlyMode && this.config.initOnly)) {
             return;
         }
         const startAt = Date.now();
