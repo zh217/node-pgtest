@@ -16,7 +16,7 @@ export class TapReporter {
         this.result = new Promise((resolve) => {
             this.tap.on('output', (res) => {
                 const timeTaken = Date.now() - this.startAt;
-                process.stdout.write(` in ${timeTaken}ms\n`);
+                process.stdout.write(chalk`{gray  in {blue ${'' + timeTaken}}ms}\n`);
                 const ok = !(res.fail.length || res.errors.length);
 
                 for (const test of res.tests) {

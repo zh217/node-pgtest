@@ -35,10 +35,10 @@ export class PgTapRunner {
             if (!this.onlyMode) {
                 await this.runTests();
             }
-            console.log(`> DONE in ${'' + (Date.now() - startAt)}ms`);
+
         } catch (e) {
-            console.log(chalk`> {red FAILED} in ${'' + (Date.now() - startAt)}ms`)
         }
+        console.log(chalk`{white DONE {gray in} {blue ${'' + (Date.now() - startAt)}}{gray ms}}`);
     }
 
     async prepare() {
@@ -52,10 +52,10 @@ export class PgTapRunner {
             return;
         }
         const startAt = Date.now();
-        process.stdout.write(chalk`{white > NUKE with {bold ${this.config.nukeScript}}}`);
+        process.stdout.write(chalk`{white NUKE {gray with ${this.config.nukeScript}}}`);
         const runner = new PSqlRunner(this.runnerConfig, ['-f', INIT_PREAMBLE, '-f', this.config.nukeScript], false);
         await runner.joinRunner();
-        console.log(` in ${Date.now() - startAt}ms`);
+        console.log(chalk`{gray  in {blue ${'' + (Date.now() - startAt)}}ms}`);
         if (runner.stderrData.length) {
             console.log(chalk`{red ${runner.stderrData.join('')}}`);
         }
@@ -70,10 +70,10 @@ export class PgTapRunner {
             return;
         }
         const startAt = Date.now();
-        process.stdout.write(chalk`{white > INIT with {bold ${this.config.initScript}}}`);
+        process.stdout.write(chalk`{white INIT {gray with ${this.config.initScript}}}`);
         const runner = new PSqlRunner(this.runnerConfig, ['-f', INIT_PREAMBLE, '-f', this.config.initScript]);
         await runner.joinRunner();
-        console.log(` in ${Date.now() - startAt}ms`);
+        console.log(chalk`{gray  in {blue ${'' + (Date.now() - startAt)}}ms}`);
         if (runner.stderrData.length) {
             console.log(chalk`{red ${runner.stderrData.join('')}}`);
         }
@@ -88,11 +88,11 @@ export class PgTapRunner {
             return;
         }
         const startAt = Date.now();
-        process.stdout.write(chalk`{white > TEST-INIT with {bold ${this.config.testScript}}}`);
+        process.stdout.write(chalk`{white PREP {gray with ${this.config.testScript}}}`);
         const runner = new PSqlRunner(this.runnerConfig,
             ['-f', INIT_PREAMBLE, '-f', TEST_SETUP, '-f', this.config.testScript]);
         await runner.joinRunner();
-        console.log(` in ${Date.now() - startAt}ms`);
+        console.log(chalk`{gray  in {blue ${'' + (Date.now() - startAt)}}ms}`);
         if (runner.stderrData.length) {
             console.log(chalk`{red ${runner.stderrData.join('')}}`);
         }
@@ -111,7 +111,7 @@ export class PgTapRunner {
     }
 
     private async runTest(test: string) {
-        process.stdout.write(chalk`{white > TEST {bold ${test}}} `);
+        process.stdout.write(chalk`{white TEST {gray ${test}}} `);
         const runner = new PSqlRunner(this.runnerConfig,
             ['-f', TEST_PREAMBLE, '-f', test]);
         const reporter = new TapReporter(runner.stdout);
@@ -121,7 +121,7 @@ export class PgTapRunner {
             console.log(chalk`{red ${runner.stderrData.join('')}}`);
         }
         if ((!result || runner.stderrData.length) && this.config.stopOnError) {
-            console.log(chalk`{white > STOP on failure in {bold.red ${test}}}`);
+            console.log(chalk`{white STOP {gray on failure in }{white ${test}}}`);
             throw Error('Encountered problem on running script');
         }
     }

@@ -61,7 +61,7 @@ try {
 
 const combinedConfig = {...defaultConfig, ...userConfig};
 
-console.log(chalk`{white > TESTING postgresql database with config {bold ${userConfigPath}}}`);
+console.log(chalk`{white CONF {gray ${userConfigPath}}}`);
 
 const basePath = path.join(path.dirname(userConfigPath), combinedConfig.directory);
 
@@ -100,7 +100,7 @@ if (!argv.w) {
         const changed = [...watcher.flush()];
         if (changed.length) {
             console.log();
-            console.log(`> FILES changed: ${changed}`);
+            console.log(chalk`{white CHNG} {gray detected: ${changed.join(', ')}}`);
         }
         running = true;
         run().then(() => {
